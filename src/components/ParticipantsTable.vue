@@ -1,35 +1,32 @@
 <script setup lang="ts">
+import BaseTable from './BaseTable.vue'
 import type { Participant } from '@/types/participant'
+import type { TableColumn } from '@/types/table'
 
 defineProps<{
   participants: readonly Participant[]
 }>()
+
+const columns: TableColumn<Participant>[] = [
+  { key: 'index', label: '#' },
+  { key: 'name', label: 'Name' },
+  { key: 'birthDate', label: 'Date of Birth' },
+  { key: 'email', label: 'Email' },
+  { key: 'phone', label: 'Phone number' },
+]
+
+function formatBirthDate(value: string): string {
+  const [year, month, day] = value.split('-')
+  return `${day}/${month}/${year}`
+}
 </script>
 
 <template>
   <section class="lottery-panel participants-block" aria-label="Participants">
-    <div class="participants-table-wrapper">
-      <table class="table participants-table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Date of Birth</th>
-            <th scope="col">Email</th>
-            <th scope="col">Phone number</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr v-for="(participant, index) in participants" :key="participant.id">
-            <td>{{ index + 1 }}</td>
-            <td>{{ participant.name }}</td>
-            <td>{{ participant.birthDate }}</td>
-            <td>{{ participant.email }}</td>
-            <td>{{ participant.phone }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <BaseTable :columns="columns" :rows="participants">
+      <template #cell-birthDate="{ row }">
+        {{ formatBirthDate(row.birthDate) }}
+      </template>
+    </BaseTable>
   </section>
 </template>

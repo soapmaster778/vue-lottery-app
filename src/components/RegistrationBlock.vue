@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
-import BaseButton from './BaseButton.vue'
-import BaseInput from './BaseInput.vue'
-import type { ParticipantFormData } from '@/types/participant'
+import ParticipantForm from './ParticipantForm.vue'
+import type { Participant, ParticipantFormData } from '@/types/participant'
 
-const form = reactive<ParticipantFormData>({
-  name: '',
-  birthDate: '',
-  email: '',
-  phone: '',
-})
+defineProps<{
+  participants: readonly Participant[]
+}>()
+
+defineEmits<{
+  save: [data: ParticipantFormData]
+}>()
 </script>
 
 <template>
@@ -18,44 +17,6 @@ const form = reactive<ParticipantFormData>({
 
     <p class="registration-description">Please fill in all the fields.</p>
 
-    <form novalidate @submit.prevent>
-      <BaseInput
-        id="registration-name"
-        v-model="form.name"
-        label="Name"
-        placeholder="Enter user name"
-        autocomplete="name"
-      />
-
-      <BaseInput
-        id="registration-birth-date"
-        v-model="form.birthDate"
-        label="Date of Birth"
-        type="date"
-        autocomplete="bday"
-      />
-
-      <BaseInput
-        id="registration-email"
-        v-model="form.email"
-        label="Email"
-        type="email"
-        placeholder="Enter email"
-        autocomplete="email"
-      />
-
-      <BaseInput
-        id="registration-phone"
-        v-model="form.phone"
-        label="Phone number"
-        type="tel"
-        placeholder="Enter Phone number"
-        autocomplete="tel"
-      />
-
-      <div class="form-actions">
-        <BaseButton type="submit" disabled> Save </BaseButton>
-      </div>
-    </form>
+    <ParticipantForm :participants="participants" @save="$emit('save', $event)" />
   </section>
 </template>
