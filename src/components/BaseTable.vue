@@ -16,7 +16,12 @@ function getCellValue(row: Row, column: TableColumn<Row>, index: number): unknow
     <table class="table participants-table">
       <thead>
         <tr>
-          <th v-for="column in columns" :key="String(column.key)" scope="col">
+          <th
+            v-for="column in columns"
+            :key="String(column.key)"
+            :aria-sort="column.ariaSort"
+            scope="col"
+          >
             <slot :name="`header-${String(column.key)}`" :column="column">
               {{ column.label }}
             </slot>
