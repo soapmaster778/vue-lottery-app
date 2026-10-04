@@ -215,6 +215,102 @@ input {
   overflow-wrap: anywhere;
 }
 
+.lottery-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1055;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  background: rgb(0 0 0 / 45%);
+}
+
+.lottery-modal-dialog {
+  width: 100%;
+  max-width: 560px;
+  max-height: calc(100dvh - 40px);
+  margin: 0;
+  overflow-y: auto;
+
+  .modal-content {
+    border-radius: 4px;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 16px 20px;
+  }
+
+  .form-actions {
+    margin-top: 24px;
+  }
+}
+
+.lottery-modal-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-close {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-left: 12px;
+  padding: 0;
+  color: #465154;
+  background: transparent;
+  border: 0;
+  border-radius: 2px;
+  cursor: pointer;
+
+  &:hover {
+    background: #f0f0f0;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
+}
+
+.delete-confirmation {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.2s ease;
+
+  .lottery-modal-dialog {
+    transition: transform 0.2s ease;
+  }
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+
+  .lottery-modal-dialog {
+    transform: translateY(-12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-enter-active,
+  .modal-leave-active,
+  .modal-enter-active .lottery-modal-dialog,
+  .modal-leave-active .lottery-modal-dialog {
+    transition: none;
+  }
+}
+
 @media (max-width: 576px) {
   .lottery-app {
     margin-top: 32px;

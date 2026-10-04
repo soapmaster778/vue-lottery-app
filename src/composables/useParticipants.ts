@@ -15,6 +15,8 @@ function isParticipant(value: unknown): value is Participant {
     return false
   }
 
+
+
   return (
     'id' in value &&
     typeof value.id === 'string' &&
@@ -146,12 +148,28 @@ export function useParticipants() {
     winnerIds.value = winnerIds.value.filter((winnerId) => winnerId !== id)
   }
 
+  function updateParticipant(id: string, data: ParticipantFormData): void {
+    const participant = participants.value.find((participant) => participant.id === id)
+
+    if (participant) {
+      Object.assign(participant, data)
+    }
+  }
+
+  function deleteParticipant(id: string): void {
+    participants.value = participants.value.filter((participant) => participant.id !== id)
+
+    removeWinner(id)
+  }
+
   return {
     participants,
     winners,
     canChooseWinner,
     storageError,
     addParticipant,
+    updateParticipant,
+    deleteParticipant,
     chooseWinner,
     removeWinner,
   }

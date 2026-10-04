@@ -67,6 +67,18 @@ function submitForm(): void {
   }
 }
 
+function handleEnter(event: KeyboardEvent): void {
+  if (event.isComposing) {
+    return
+  }
+
+  event.preventDefault()
+
+  if (!event.repeat) {
+    submitForm()
+  }
+}
+
 watch(
   () => props.participant,
   (participant) => {
@@ -86,7 +98,7 @@ watch(
 </script>
 
 <template>
-  <form novalidate @submit.prevent="submitForm" @keydown.enter.prevent="submitForm">
+  <form novalidate @submit.prevent="submitForm" @keydown.enter="handleEnter">
     <BaseInput
       :id="`${idPrefix}-name`"
       v-model="form.name"

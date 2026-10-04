@@ -1,4 +1,5 @@
 export interface TableColumn<Row> {
-  key: keyof Row | 'index'
+  key: string
   label: string
+  value?: (row: Row, index: number) => unknown
 }

@@ -7,11 +7,7 @@ defineProps<{
 }>()
 
 function getCellValue(row: Row, column: TableColumn<Row>, index: number): unknown {
-  if (column.key === 'index') {
-    return index + 1
-  }
-
-  return row[column.key]
+  return column.value?.(row, index) ?? ''
 }
 </script>
 
