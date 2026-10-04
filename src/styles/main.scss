@@ -205,6 +205,16 @@ input {
   }
 }
 
+.storage-error {
+  margin: 0;
+  padding: 12px 16px;
+  color: #842029;
+  background: #fff1f2;
+  border-left: 3px solid #dc3545;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 576px) {
   .lottery-app {
     margin-top: 32px;

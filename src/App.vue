@@ -1,59 +1,26 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
 import ParticipantsTable from './components/ParticipantsTable.vue'
 import RegistrationBlock from './components/RegistrationBlock.vue'
 import WinnersBlock from './components/WinnersBlock.vue'
-import type { Participant, ParticipantFormData } from './types/participant'
+import { useParticipants } from './composables/useParticipants'
 
-const MAX_WINNERS = 3
-
-const participants = ref<Participant[]>([])
-const winnerIds = ref<string[]>([])
-
-const winners = computed<Participant[]>(() =>
-  winnerIds.value.flatMap((id) => {
-    const participant = participants.value.find((participant) => participant.id === id)
-
-    return participant ? [participant] : []
-  }),
-)
-
-const availableParticipants = computed<Participant[]>(() =>
-  participants.value.filter((participant) => !winnerIds.value.includes(participant.id)),
-)
-
-const canChooseWinner = computed<boolean>(
-  () => winnerIds.value.length < MAX_WINNERS && availableParticipants.value.length > 0,
-)
-
-function addParticipant(data: ParticipantFormData): void {
-  participants.value.push({
-    id: crypto.randomUUID(),
-    ...data,
-  })
-}
-
-function chooseWinner(): void {
-  if (!canChooseWinner.value) {
-    return
-  }
-
-  const candidates = availableParticipants.value
-  const randomIndex = Math.floor(Math.random() * candidates.length)
-  const participant = candidates[randomIndex]
-
-  if (participant) {
-    winnerIds.value.push(participant.id)
-  }
-}
-
-function removeWinner(id: string): void {
-  winnerIds.value = winnerIds.value.filter((winnerId) => winnerId !== id)
-}
+const {
+  participants,
+  winners,
+  canChooseWinner,
+  storageError,
+  addParticipant,
+  chooseWinner,
+  removeWinner,
+} = useParticipants()
 </script>
 
 <template>
   <main class="lottery-app">
+    <p v-if="storageError" class="storage-error" role="alert">
+      {{ storageError }}
+    </p>
+
     <WinnersBlock
       :winners="winners"
       :can-choose-winner="canChooseWinner"
