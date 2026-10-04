@@ -30,8 +30,11 @@ input {
 }
 
 .lottery-app {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   width: min(800px, calc(100% - 32px));
-  margin: 100px auto 48px;
+  margin: 140px auto 48px;
 }
 
 .lottery-panel {
@@ -45,6 +48,118 @@ input {
   margin: 0;
   font-size: 16px;
   font-weight: 700;
+  line-height: 1.5;
+}
+
+.lottery-button {
+  min-height: 34px;
+  padding: 6px 20px;
+  border-radius: 2px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-color: #fff;
+    --bs-btn-disabled-color: #fff;
+  }
+}
+
+.winners-block {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding-top: 17px;
+  padding-bottom: 17px;
+}
+
+.winners-list {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 38px;
+  padding: 6px 10px;
+  border: 1px solid #dedede;
+  border-radius: 4px;
+}
+
+.winners-placeholder {
+  color: #999;
+  font-size: 14px;
+}
+
+.registration-description {
+  margin: 2px 0 26px;
+  color: #8da2ab;
+  font-size: 16px;
+}
+
+.lottery-field {
+  margin-bottom: 14px;
+
+  .form-label {
+    margin-bottom: 4px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .form-control {
+    min-height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+
+    &::placeholder {
+      color: #929292;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 50px;
+}
+
+.participants-table-wrapper {
+  overflow-x: auto;
+}
+
+.participants-table {
+  width: 100%;
+  min-width: 650px;
+  margin: 0;
+  font-size: 14px;
+
+  > :not(caption) > * > * {
+    padding: 10px 6px;
+    border-bottom-color: #f0f0f0;
+  }
+
+  th {
+    color: #465154;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  td {
+    color: #888;
+    overflow-wrap: anywhere;
+  }
+
+  th:first-child,
+  td:first-child {
+    width: 40px;
+    color: #999;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
 }
 
 @media (max-width: 576px) {
@@ -54,5 +169,22 @@ input {
 
   .lottery-panel {
     padding: 16px;
+  }
+
+  .winners-block {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .winners-list {
+    flex-basis: 100%;
+  }
+
+  .winners-block > .lottery-button {
+    margin-left: auto;
+  }
+
+  .form-actions {
+    margin-top: 30px;
   }
 }
