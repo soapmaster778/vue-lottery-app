@@ -1,0 +1,58 @@
+@import 'bootstrap/scss/functions';
+
+$primary: #00b3d7;
+$body-bg: #f5f5f5;
+$body-color: #263238;
+$font-family-sans-serif: Arial, Helvetica, sans-serif;
+$border-radius: 0.25rem;
+$input-border-radius: 0;
+$input-bg: #fafafa;
+$input-border-color: #e5e5e5;
+
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+@import 'bootstrap/scss/forms';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/tables';
+@import 'bootstrap/scss/modal';
+
+body {
+  min-width: 320px;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.lottery-app {
+  width: min(800px, calc(100% - 32px));
+  margin: 100px auto 48px;
+}
+
+.lottery-panel {
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+}
+
+.lottery-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+@media (max-width: 576px) {
+  .lottery-app {
+    margin-top: 32px;
+  }
+
+  .lottery-panel {
+    padding: 16px;
+  }
+}
