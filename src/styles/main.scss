@@ -162,6 +162,49 @@ input {
   }
 }
 
+.winner-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  padding: 3px 5px;
+  color: #fff;
+  background: $primary;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.winner-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.winner-remove {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 2px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgb(0 0 0 / 15%);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #263238;
+    outline-offset: 2px;
+  }
+}
+
 @media (max-width: 576px) {
   .lottery-app {
     margin-top: 32px;
