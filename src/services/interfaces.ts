@@ -1,6 +1,7 @@
 export interface ListParams {
   limit?: number
   skip?: number
+  signal?: AbortSignal
 }
 
 export interface Readable<T, TCollection = T[]> {

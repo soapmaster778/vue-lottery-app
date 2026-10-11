@@ -2,12 +2,32 @@
 import { ref, useId, watch } from 'vue'
 import { Search, X } from 'lucide-vue-next'
 
+const props = withDefaults(
+  defineProps<{
+    modelValue?: string
+    label?: string
+    placeholder?: string
+  }>(),
+  {
+    modelValue: '',
+    label: 'Пошук за іменем',
+    placeholder: 'Введіть ім’я',
+  },
+)
+
 const emit = defineEmits<{
   'filter-by-name': [value: string]
 }>()
 
 const inputId = useId()
-const query = ref('')
+const query = ref(props.modelValue)
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    query.value = value
+  },
+)
 
 watch(query, (value, _previousValue, onCleanup) => {
   const timer = setTimeout(() => {
@@ -22,7 +42,9 @@ watch(query, (value, _previousValue, onCleanup) => {
 
 <template>
   <div class="search-bar">
-    <label :for="inputId" class="search-label"> Пошук за іменем </label>
+    <label :for="inputId" class="search-label">
+      {{ label }}
+    </label>
 
     <div class="search-input-wrapper">
       <Search :size="18" class="search-icon" aria-hidden="true" />
@@ -32,7 +54,7 @@ watch(query, (value, _previousValue, onCleanup) => {
         v-model="query"
         type="search"
         class="form-control search-input"
-        placeholder="Введіть ім’я"
+        :placeholder="placeholder"
         autocomplete="off"
       />
 

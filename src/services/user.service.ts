@@ -28,14 +28,18 @@ export class UserService implements UserRepository {
   getAll(params: ListParams = {}): Promise<UsersResponse> {
     const query = createListQuery(params)
 
-    return http<UsersResponse>(`/users?${query}`)
+    return http<UsersResponse>(`/users?${query}`, {
+      signal: params.signal,
+    })
   }
 
   search(searchQuery: string, params: ListParams = {}): Promise<UsersResponse> {
     const query = createListQuery(params)
     query.set('q', searchQuery)
 
-    return http<UsersResponse>(`/users/search?${query}`)
+    return http<UsersResponse>(`/users/search?${query}`, {
+      signal: params.signal,
+    })
   }
 
   getById(id: number): Promise<User> {
