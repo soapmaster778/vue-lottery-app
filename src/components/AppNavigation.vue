@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
 const router = useRouter()
-const route = useRoute()
 
 async function logout(): Promise<void> {
   auth.logout()
@@ -33,9 +32,7 @@ async function logout(): Promise<void> {
     <RouterLink
       :to="{ name: 'users' }"
       class="navigation-link"
-      :class="{
-        'navigation-link-active': route.matched.some((record) => record.path === '/users'),
-      }"
+      active-class="navigation-link-active"
     >
       Users
     </RouterLink>

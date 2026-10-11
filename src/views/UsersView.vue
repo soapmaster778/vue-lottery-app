@@ -176,25 +176,8 @@ async function changeSearch(query: string): Promise<void> {
 }
 
 async function retry(): Promise<void> {
-  if (usersStore.isLoading) {
-    return
-  }
-
-  const requestedPage = page.value
-  const requestedQuery = searchQuery.value
-
-  const loaded = await usersStore.loadPage(requestedPage, requestedQuery)
-
-  if (
-    loaded &&
-    page.value === requestedPage &&
-    searchQuery.value === requestedQuery &&
-    requestedPage > usersStore.pageCount
-  ) {
-    await router.replace({
-      name: 'users',
-      query: getListQuery(usersStore.pageCount, requestedQuery),
-    })
+  if (!usersStore.isLoading) {
+    await usersStore.loadPage(page.value, searchQuery.value)
   }
 }
 
