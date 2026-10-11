@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="Row extends { id: string }">
+<script setup lang="ts" generic="Row extends { id: string | number }">
 import type { TableColumn } from '@/types/table'
 
 defineProps<{

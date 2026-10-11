@@ -428,6 +428,18 @@ input {
   }
 }
 
+.request-error {
+  padding: 16px;
+  color: #842029;
+  background: #fff1f2;
+  border-left: 3px solid #dc3545;
+  overflow-wrap: anywhere;
+
+  p {
+    margin: 0 0 12px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .modal-enter-active,
   .modal-leave-active,
