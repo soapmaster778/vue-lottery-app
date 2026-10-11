@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, watch, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, RouterLink, useRouter } from 'vue-router'
 import type { LocationQueryRaw } from 'vue-router'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseTable from '@/components/BaseTable.vue'
@@ -12,11 +12,14 @@ import type { User } from '@/types/user'
 import AppModal from '@/components/AppModal.vue'
 import UserForm from '@/components/UserForm.vue'
 import type { CreateUserDto } from '@/types/user'
+import { getErrorMessage } from '@/utils/errors'
 
 const route = useRoute()
 const router = useRouter()
 const usersStore = useUsersStore()
 const isCreateOpen = ref(false)
+const deletingUser = ref<User | null>(null)
+const deleteError = ref('')
 
 const page = computed<number>(() => {
   const value = route.query.page
@@ -65,7 +68,54 @@ const columns: TableColumn<User>[] = [
     label: 'Phone number',
     value: (user) => user.phone,
   },
+  {
+    key: 'edit',
+    label: 'Редагування',
+  },
+  {
+    key: 'delete',
+    label: 'Видалення',
+  },
 ]
+
+function openDeleteModal(user: User): void {
+  deleteError.value = ''
+  deletingUser.value = user
+}
+
+function closeDeleteModal(): void {
+  if (!usersStore.isSaving) {
+    deletingUser.value = null
+    deleteError.value = ''
+  }
+}
+
+async function confirmDelete(): Promise<void> {
+  if (!deletingUser.value || usersStore.isSaving) {
+    return
+  }
+
+  deleteError.value = ''
+
+  try {
+    await usersStore.deleteUser(deletingUser.value.id)
+
+    deletingUser.value = null
+
+    const nextPage = Math.min(page.value, usersStore.pageCount)
+
+    if (nextPage !== page.value) {
+      await router.replace({
+        name: 'users',
+        query: getListQuery(nextPage, searchQuery.value),
+      })
+    } else {
+      await usersStore.loadPage(page.value, searchQuery.value)
+    }
+  } catch (cause: unknown) {
+    deleteError.value = getErrorMessage(cause)
+  }
+}
 
 function getListQuery(nextPage: number, query: string): LocationQueryRaw {
   return {
@@ -183,7 +233,44 @@ onBeforeUnmount(() => {
     </div>
 
     <div v-else class="lottery-panel">
-      <BaseTable :columns="columns" :rows="usersStore.users" />
+      <BaseTable :columns="columns" :rows="usersStore.users">
+        <template #cell-name="{ row }">
+          <RouterLink
+            :to="{
+              name: 'user-details',
+              params: { id: String(row.id) },
+              query: route.query,
+            }"
+            class="project-link"
+          >
+            {{ row.firstName }} {{ row.lastName }}
+          </RouterLink>
+        </template>
+
+        <template #cell-edit="{ row }">
+          <RouterLink
+            :to="{
+              name: 'user-edit',
+              params: { id: String(row.id) },
+              query: route.query,
+            }"
+            class="btn btn-secondary lottery-button table-action-button"
+          >
+            Редагувати дані
+          </RouterLink>
+        </template>
+
+        <template #cell-delete="{ row }">
+          <BaseButton
+            variant="danger"
+            class="table-action-button"
+            :disabled="usersStore.isSaving"
+            @click="openDeleteModal(row)"
+          >
+            Видалити користувача
+          </BaseButton>
+        </template>
+      </BaseTable>
 
       <p v-if="usersStore.users.length === 0" class="table-empty-message" role="status">
         Користувачів не знайдено.
@@ -207,5 +294,27 @@ onBeforeUnmount(() => {
     <template #header> Додати користувача </template>
 
     <UserForm v-if="isCreateOpen" :save="saveNewUser" />
+  </AppModal>
+  <AppModal :open="deletingUser !== null" @close="closeDeleteModal">
+    <template #header> Видалити користувача </template>
+
+    <p v-if="deletingUser" class="delete-confirmation">
+      Ви дійсно бажаєте видалити користувача «{{ deletingUser.firstName }}
+      {{ deletingUser.lastName }}», «{{ deletingUser.email }}»?
+    </p>
+
+    <p v-if="deleteError" class="login-error" role="alert">
+      {{ deleteError }}
+    </p>
+
+    <template #footer>
+      <BaseButton variant="secondary" :disabled="usersStore.isSaving" @click="closeDeleteModal">
+        Ні
+      </BaseButton>
+
+      <BaseButton variant="danger" :disabled="usersStore.isSaving" @click="confirmDelete">
+        {{ usersStore.isSaving ? 'Видалення…' : 'Так' }}
+      </BaseButton>
+    </template>
   </AppModal>
 </template>

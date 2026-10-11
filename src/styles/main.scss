@@ -535,6 +535,60 @@ input {
   margin-top: 20px;
 }
 
+.user-detail-status,
+.user-detail-heading {
+  margin-top: 24px;
+}
+
+.user-avatar {
+  display: block;
+  margin-bottom: 20px;
+  object-fit: contain;
+}
+
+.user-details-list {
+  margin: 0;
+}
+
+.user-detail-row {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e5e5;
+
+  dt,
+  dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  dt {
+    font-size: 14px;
+  }
+
+  dd {
+    color: #526169;
+    font-size: 14px;
+  }
+}
+
+.user-edit-section {
+  max-width: 720px;
+}
+
+.user-edit-cancel {
+  display: inline-block;
+  margin-top: 16px;
+}
+
+@media (max-width: 576px) {
+  .user-detail-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+}
+
 @media (max-width: 576px) {
   .user-form-grid {
     grid-template-columns: minmax(0, 1fr);
