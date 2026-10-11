@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, watch } from 'vue'
+import { computed, onBeforeUnmount, watch, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { LocationQueryRaw } from 'vue-router'
 import BaseButton from '@/components/BaseButton.vue'
@@ -9,10 +9,14 @@ import UserPagination from '@/components/UserPagination.vue'
 import { useUsersStore } from '@/stores/users'
 import type { TableColumn } from '@/types/table'
 import type { User } from '@/types/user'
+import AppModal from '@/components/AppModal.vue'
+import UserForm from '@/components/UserForm.vue'
+import type { CreateUserDto } from '@/types/user'
 
 const route = useRoute()
 const router = useRouter()
 const usersStore = useUsersStore()
+const isCreateOpen = ref(false)
 
 const page = computed<number>(() => {
   const value = route.query.page
@@ -68,6 +72,27 @@ function getListQuery(nextPage: number, query: string): LocationQueryRaw {
     ...route.query,
     page: nextPage > 1 ? String(nextPage) : undefined,
     q: query || undefined,
+  }
+}
+
+function closeCreateModal(): void {
+  if (!usersStore.isCreating) {
+    isCreateOpen.value = false
+  }
+}
+
+async function saveNewUser(data: CreateUserDto): Promise<void> {
+  await usersStore.createUser(data)
+
+  isCreateOpen.value = false
+
+  if (page.value !== 1 || searchQuery.value !== '') {
+    await router.push({
+      name: 'users',
+      query: getListQuery(1, ''),
+    })
+  } else {
+    await usersStore.loadPage(1, '')
   }
 }
 
@@ -134,7 +159,13 @@ onBeforeUnmount(() => {
 
 <template>
   <section>
-    <h1 class="page-title">Users</h1>
+    <div class="users-page-heading">
+      <h1 class="page-title">Users</h1>
+
+      <BaseButton :disabled="usersStore.isCreating" @click="isCreateOpen = true">
+        Додати користувача
+      </BaseButton>
+    </div>
 
     <SearchBar
       :model-value="searchQuery"
@@ -172,4 +203,9 @@ onBeforeUnmount(() => {
       />
     </div>
   </section>
+  <AppModal :open="isCreateOpen" @close="closeCreateModal">
+    <template #header> Додати користувача </template>
+
+    <UserForm v-if="isCreateOpen" :save="saveNewUser" />
+  </AppModal>
 </template>
