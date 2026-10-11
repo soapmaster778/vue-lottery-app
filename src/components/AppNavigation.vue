@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
+const router = useRouter()
+
+async function logout(): Promise<void> {
+  auth.logout()
+  await router.replace({ name: 'login' })
+}
 </script>
 
 <template>
@@ -28,7 +37,17 @@ import { RouterLink } from 'vue-router'
       Users
     </RouterLink>
 
+    <button
+      v-if="auth.isAuthenticated"
+      type="button"
+      class="navigation-link navigation-button"
+      @click="logout"
+    >
+      Logout
+    </button>
+
     <RouterLink
+      v-else
       :to="{ name: 'login' }"
       class="navigation-link"
       active-class="navigation-link-active"
