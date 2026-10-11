@@ -1,0 +1,1 @@
+var e={authorName:`Андрієш Євгеній Віталійович`,githubProfileUrl:`https://github.com/soapmaster778`,githubRepositoryUrl:`https://github.com/soapmaster778/vue-lottery-app`};export{e as t};

@@ -1,0 +1,1 @@
+import{C as e,J as t,c as n,m as r}from"./runtime-core.esm-bundler-DCacmmXS.js";import{s as i}from"./index-zhlwre0w.js";var a=r({__name:`UsersLayout`,setup(r){return(r,a)=>(e(),n(t(i)))}});export{a as default};
